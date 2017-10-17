@@ -5,6 +5,7 @@ namespace SVG\Writing;
 use SVG\Nodes\Structures\SVGStyle;
 use SVG\Nodes\SVGNode;
 use SVG\Nodes\SVGNodeContainer;
+use SVG\Nodes\Shapes\SVGText;
 
 /**
  * This class is used for composing ("writing") XML strings from nodes.
@@ -49,7 +50,11 @@ class SVGWriter
         $this->appendAttributes($node->getSerializableAttributes());
         $this->appendStyles($node->getSerializableStyles());
 
-        if (!($node instanceof SVGNodeContainer) && !($node instanceof SVGStyle)) {
+        if (
+            !($node instanceof SVGNodeContainer)
+            && !($node instanceof SVGStyle)
+            && !($node instanceof SVGText)
+        ) {
             $this->outString .= ' />';
             return;
         }
@@ -57,6 +62,13 @@ class SVGWriter
         $this->outString .= '>';
         if ($node instanceof SVGStyle) {
             $this->writeCdata($node->getCss());
+            $this->outString .= '</'.$node->getName().'>';
+
+            return;
+        }
+
+        if ($node instanceof SVGText) {
+            $this->outString .= htmlentities($node->getText());
             $this->outString .= '</'.$node->getName().'>';
 
             return;
