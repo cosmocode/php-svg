@@ -3,6 +3,7 @@
 namespace SVG\Writing;
 
 use SVG\Nodes\Structures\SVGStyle;
+use SVG\Nodes\Structures\SVGTitle;
 use SVG\Nodes\SVGNode;
 use SVG\Nodes\SVGNodeContainer;
 use SVG\Nodes\Shapes\SVGText;
@@ -54,6 +55,7 @@ class SVGWriter
             !($node instanceof SVGNodeContainer)
             && !($node instanceof SVGStyle)
             && !($node instanceof SVGText)
+            && !($node instanceof SVGTitle)
         ) {
             $this->outString .= ' />';
             return;
@@ -67,7 +69,8 @@ class SVGWriter
             return;
         }
 
-        if ($node instanceof SVGText) {
+        if ($node instanceof SVGText
+            || $node instanceof SVGTitle) {
             $this->outString .= htmlentities($node->getText());
             $this->outString .= '</'.$node->getName().'>';
 
