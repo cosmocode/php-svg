@@ -19,7 +19,7 @@ class SVGWriter
 
     public function __construct()
     {
-        $this->outString = '<?xml version="1.0" encoding="utf-8"?>';
+        $this->outString = '';
     }
 
     /**
